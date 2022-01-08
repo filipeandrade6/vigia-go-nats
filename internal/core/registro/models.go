@@ -11,15 +11,15 @@ import (
 // TODO colcoar campos agregados e data de criacao e edicao
 
 type Registro struct {
-	RegistroID    string
-	ProcessoID    string
-	Placa         string
-	TipoVeiculo   string
-	CorVeiculo    string
-	MarcaVeiculo  string
-	Armazenamento string
-	Confianca     float32
-	CriadoEm      time.Time
+	RegistroID    string    `json:"registro_id"`
+	ProcessoID    string    `json:"processo_id"`
+	Placa         string    `json:"placa"`
+	TipoVeiculo   string    `json:"tipo_veiculo"`
+	CorVeiculo    string    `json:"cor_veiculo"`
+	MarcaVeiculo  string    `json:"marca_veiculo"`
+	Armazenamento string    `json:"armazenamento"`
+	Confianca     float32   `json:"confianca"`
+	CriadoEm      time.Time `json:"criado_em"`
 }
 
 // =============================================================================

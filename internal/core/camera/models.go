@@ -11,15 +11,15 @@ import (
 // TODO colcoar campos agregados e data de criacao e edicao
 
 type Camera struct {
-	CameraID   string
-	Descricao  string
-	EnderecoIP string
-	Porta      int
-	Canal      int
-	Usuario    string
-	Senha      string
-	Latitude   string
-	Longitude  string
+	CameraID   string `json:"camera_id"`
+	Descricao  string `json:"descricao"`
+	EnderecoIP string `json:"endereco_ip"`
+	Porta      int    `json:"porta"`
+	Canal      int    `json:"canal"`
+	Usuario    string `json:"usuario"`
+	Senha      string `json:"senha"`
+	Latitude   string `json:"latitude"`
+	Longitude  string `json:"longitude"`
 }
 
 type NewCamera struct {

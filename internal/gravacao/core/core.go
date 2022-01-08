@@ -15,6 +15,7 @@ import (
 	"github.com/filipeandrade6/vigia-go/internal/gravacao/config"
 	"github.com/filipeandrade6/vigia-go/internal/sys/database"
 	"github.com/filipeandrade6/vigia-go/internal/sys/messaging"
+	"github.com/nats-io/nats.go"
 
 	"github.com/filipeandrade6/vigia-go/internal/gravacao/service"
 
@@ -72,13 +73,19 @@ func Run(log *zap.SugaredLogger, cfg config.Configuration) error {
 	// =========================================================================
 	// Messaging support
 
-	msgr, err := messaging.Connect(messaging.Config{
+	msgrConn, err := messaging.Connect(messaging.Config{
 		Name: "manager",               // TODO puxar das configs
 		URL:  "nats://localhost:4222", // TODO puxar das configs
 	})
 	if err != nil {
 		return fmt.Errorf("connecting to messaging support: %w", err)
 	}
+
+	msgr, err := nats.NewEncodedConn(msgrConn, nats.JSON_ENCODER)
+	if err != nil {
+		return fmt.Errorf("wrapping with encoder the messaging support: %w", err)
+	}
+
 	defer func() {
 		log.Infow("shutdown", "status", "stopping messaging support", "host", "cfg.Messaging.URL") // TODO trocar
 
