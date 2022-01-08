@@ -1,0 +1,41 @@
+services:
+
+  gerencia-admin:
+    build:
+      context: ../
+      dockerfile: deployments/dockerfile.gerencia-admin
+    env_file:
+      - .dev.env
+    depends_on:
+      - gerencia
+    links:
+      - gerencia
+    command: ["migrate"]
+
+  gerencia:
+    build:
+      context: ../
+      dockerfile: deployments/dockerfile.gerencia
+    env_file:
+      - .dev.env
+    links:
+      - gravacao
+    command: ["iniciar"]
+
+  gravacao:
+    build:
+      context: ../
+      dockerfile: deployments/dockerfile.gravacao
+    env_file:
+      - .dev.env
+    command: ["iniciar"]
+
+  # metrics:
+  #   build:
+  #     context: ../
+  #     dockerfile: deployments/dockerfile.metrics
+  #   env_file:
+  #     - .dev.env
+  #   ports:
+  #     - "3001:3001"
+  #     - "4001:4001"

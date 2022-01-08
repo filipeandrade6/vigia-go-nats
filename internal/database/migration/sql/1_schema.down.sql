@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS veiculos;
+
+DROP TABLE IF EXISTS registros;
+
+DROP TABLE IF EXISTS processos;
+
+DROP TABLE IF EXISTS servidores_gravacao;
+
+DROP TABLE IF EXISTS cameras;
+
+DROP TABLE IF EXISTS usuarios;

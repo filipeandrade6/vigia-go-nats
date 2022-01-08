@@ -1,0 +1,30 @@
+## Build
+FROM golang:1.16-buster AS base
+
+LABEL project="vigia-go"
+
+WORKDIR /app
+
+COPY ./go.mod go.sum ./
+RUN go mod download
+
+FROM base AS build_gerencia_admin
+
+LABEL app="gerencia-admin"
+
+COPY ./cmd ./cmd
+COPY ./internal ./internal
+
+RUN go build -o ./build/gerencia-admin ./cmd/gerencia-admin
+
+## Deploy
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /app
+
+COPY --from=build_gerencia_admin /app/build/gerencia-admin ./gerencia-admin
+COPY ./deployments/keys ./deployments/keys
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/app/gerencia-admin"]

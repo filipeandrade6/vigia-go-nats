@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "./internal/api/v1";
+
+package gerencia;
+
+service Gerencia {
+    rpc Check(CheckReq) returns (CheckRes) {}
+    rpc Match(MatchReq) returns (MatchRes) {}
+    rpc ErrorReport(ErrorReportReq) returns (ErrorReportRes) {}
+}
+
+message CheckReq {
+    string servidor_gravacao_id = 1;
+}
+
+message CheckRes {}
+
+message MatchReq {
+    string veiculo_id = 1;
+    string registro_id = 2;
+}
+
+message MatchRes {}
+
+message ErrorReportReq {
+    string servidor_gravacao_id = 1;
+    string processo_id = 2;
+    string registro_id =3;
+    string error = 4;
+    bool stopped_processo = 5;
+}
+
+message ErrorReportRes {}

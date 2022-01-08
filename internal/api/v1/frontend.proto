@@ -1,0 +1,329 @@
+syntax = "proto3";
+
+option go_package = "./internal/api/v1";
+
+package frontend;
+
+import "google/protobuf/wrappers.proto";
+
+service Frontend {
+    rpc Login(LoginReq) returns (LoginRes) {}
+
+    rpc Migrate (MigrateReq) returns (MigrateRes) {}
+    // TODO da pra consultar a versão na tabela schema_migrations coluna version e dirty
+
+    rpc CreateUsuario (CreateUsuarioReq) returns (CreateUsuarioRes) {}
+    rpc ReadUsuario (ReadUsuarioReq) returns (ReadUsuarioRes) {}
+    rpc ReadUsuarios (ReadUsuariosReq) returns (ReadUsuariosRes) {}
+    rpc UpdateUsuario (UpdateUsuarioReq) returns (UpdateUsuarioRes) {}
+    rpc DeleteUsuario (DeleteUsuarioReq) returns (DeleteUsuarioRes) {}
+
+    rpc CreateServidorGravacao (CreateServidorGravacaoReq) returns (CreateServidorGravacaoRes) {}
+    rpc ReadServidorGravacao (ReadServidorGravacaoReq) returns (ReadServidorGravacaoRes) {}
+    rpc ReadServidoresGravacao (ReadServidoresGravacaoReq) returns (ReadServidoresGravacaoRes) {}
+    rpc UpdateServidorGravacao (UpdateServidorGravacaoReq) returns (UpdateServidorGravacaoRes) {}
+    rpc DeleteServidorGravacao (DeleteServidorGravacaoReq) returns (DeleteServidorGravacaoRes) {}
+
+    rpc CreateCamera (CreateCameraReq) returns (CreateCameraRes) {}
+    rpc ReadCamera (ReadCameraReq) returns (ReadCameraRes) {}
+    rpc ReadCameras (ReadCamerasReq) returns (ReadCamerasRes) {}
+    rpc UpdateCamera (UpdateCameraReq) returns (UpdateCameraRes) {}
+    rpc DeleteCamera (DeleteCameraReq) returns (DeleteCameraRes) {}
+
+    rpc CreateProcesso (CreateProcessoReq) returns (CreateProcessoRes) {}
+    rpc ReadProcesso (ReadProcessoReq) returns (ReadProcessoRes) {}
+    rpc ReadProcessos (ReadProcessosReq) returns (ReadProcessosRes) {}
+    rpc UpdateProcesso (UpdateProcessoReq) returns (UpdateProcessoRes) {}
+    rpc DeleteProcesso (DeleteProcessoReq) returns (DeleteProcessoRes) {}
+
+    rpc CreateVeiculo (CreateVeiculoReq) returns (CreateVeiculoRes) {}
+    rpc ReadVeiculo (ReadVeiculoReq) returns (ReadVeiculoRes) {}
+    rpc ReadVeiculos (ReadVeiculosReq) returns (ReadVeiculosRes) {}
+    rpc UpdateVeiculo (UpdateVeiculoReq) returns (UpdateVeiculoRes) {}
+    rpc DeleteVeiculo (DeleteVeiculoReq) returns (DeleteVeiculoRes) {}
+}
+
+// =========
+
+message LoginReq{
+    string email = 1;
+    string senha = 2;
+}
+
+message LoginRes{
+    string access_token = 1;
+}
+
+// =========
+
+message MigrateReq{
+    int32 versao = 1;
+}
+
+message MigrateRes{}
+
+// =========
+
+message Usuario {
+    string usuario_id = 1;
+    string email = 2;
+    repeated string funcao = 3;
+    string senha = 4;
+}
+
+message CreateUsuarioReq {
+    Usuario usuario = 1;
+}
+
+message CreateUsuarioRes {
+    string usuario_id = 1;
+}
+
+message ReadUsuarioReq {
+    string usuario_id = 1;
+}
+
+message ReadUsuarioRes {
+    Usuario usuario = 1;
+}
+
+message ReadUsuariosReq {
+    string query = 1;
+    int32 page_number = 2;
+    int32 rows_per_page = 3;
+}
+
+message ReadUsuariosRes {
+    repeated Usuario usuarios = 1;
+}
+
+message UpdateUsuarioReq {
+    string usuario_id = 1;
+    google.protobuf.StringValue email = 3;
+    repeated string funcao = 2;
+    google.protobuf.StringValue senha = 4;
+}
+
+message UpdateUsuarioRes {}
+
+message DeleteUsuarioReq {
+    repeated string usuario_id = 1;
+}
+
+message DeleteUsuarioRes {}
+
+// =======================
+
+message ServidorGravacao {
+    string servidor_gravacao_id = 1;
+    string endereco_ip = 2;
+    int32 porta = 3;
+    string armazenamento = 4;
+    int32 horas_retencao = 5;
+}
+
+message CreateServidorGravacaoReq {
+    ServidorGravacao servidor_gravacao = 1;
+}
+
+message CreateServidorGravacaoRes {
+    string servidor_gravacao_id = 1;
+}
+
+message ReadServidorGravacaoReq {
+    string servidor_gravacao_id = 1;
+}
+
+message ReadServidorGravacaoRes {
+    ServidorGravacao servidor_gravacao = 1;
+}
+
+message ReadServidoresGravacaoReq {
+    string query = 1;
+    int32 page_number = 2;
+    int32 rows_per_page = 3;
+}
+
+message ReadServidoresGravacaoRes {
+    repeated ServidorGravacao service_gravacao = 1;
+}
+
+message UpdateServidorGravacaoReq {
+    string servidor_gravacao_id = 1;
+    google.protobuf.StringValue endereco_ip = 2;
+    google.protobuf.Int32Value porta = 3;
+    google.protobuf.StringValue armazenamento = 4;
+    google.protobuf.Int32Value horas_retencao = 5;
+}
+
+message UpdateServidorGravacaoRes {}
+
+message DeleteServidorGravacaoReq {
+    repeated string servidor_gravacao_id = 1;
+}
+
+message DeleteServidorGravacaoRes {}
+
+// =======================
+
+message Camera {
+    string camera_id = 1;
+    string descricao = 2;
+    string endereco_ip = 3;
+    int32 porta = 4;
+    int32 canal = 5;
+    string usuario = 6;
+    string senha = 7;
+    string latitude = 8;
+    string longitude = 9;
+}
+
+message CreateCameraReq{
+    Camera camera = 1;
+}
+
+message CreateCameraRes{
+    string camera_id = 1;
+}
+
+message ReadCameraReq{
+    string camera_id = 1;
+}
+
+message ReadCameraRes{
+    Camera camera = 1;
+}
+
+message ReadCamerasReq{
+    string query = 1;
+    int32 page_number = 2;
+    int32 rows_per_page = 3;
+}
+
+message ReadCamerasRes{
+    repeated Camera cameras = 1;
+}
+
+message UpdateCameraReq{
+    string camera_id = 1;
+    google.protobuf.StringValue descricao = 2;
+    google.protobuf.StringValue endereco_ip = 3;
+    google.protobuf.Int32Value porta = 4;
+    google.protobuf.Int32Value canal = 5;
+    google.protobuf.StringValue usuario = 6;
+    google.protobuf.StringValue senha = 7;
+    google.protobuf.StringValue latitude = 8;
+    google.protobuf.StringValue longitude = 9;
+}
+
+message UpdateCameraRes{}
+
+message DeleteCameraReq{
+    repeated string camera_id = 1;
+}
+
+message DeleteCameraRes{}
+
+// =======================
+
+message Processo {
+    string processo_id = 1;
+    string servidor_gravacao_id = 2;
+    string camera_id = 3;
+    int32 processador = 4;
+    int32 adaptador = 5;
+}
+
+message CreateProcessoReq{
+    Processo processo = 1;
+}
+
+message CreateProcessoRes{
+    string processo_id = 1;
+}
+
+message ReadProcessoReq{
+    string processo_id = 1;
+}
+
+message ReadProcessoRes{
+    Processo processo = 1;
+}
+
+message ReadProcessosReq{
+    string query = 1;
+    int32 page_number = 2;
+    int32 rows_per_page = 3;
+}
+
+message ReadProcessosRes{
+    repeated Processo processo = 1;
+}
+
+message UpdateProcessoReq{
+    Processo processo = 1;
+}
+
+message UpdateProcessoRes{}
+
+message DeleteProcessoReq{
+    repeated string processo_id = 1;
+}
+
+message DeleteProcessoRes{}
+
+// =======================
+
+message Veiculo {
+    string veiculo_id = 1;
+    string placa = 2;
+    string tipo = 3;
+    string cor = 4;
+    string marca = 5;
+    string info = 6;
+}
+
+message CreateVeiculoReq {
+    Veiculo veiculo = 1;
+}
+
+message CreateVeiculoRes {
+    string veiculo_id = 1;
+}
+
+message ReadVeiculoReq {
+    string veiculo_id = 1;
+}
+
+message ReadVeiculoRes {
+    Veiculo veiculo = 1;
+}
+
+message ReadVeiculosReq {
+    string query = 1;
+    int32 page_number = 2;
+    int32 rows_per_page = 3;
+}
+
+message ReadVeiculosRes {
+    repeated Veiculo veiculos = 1;
+}
+
+message UpdateVeiculoReq {
+    string veiculo_id = 1;
+    google.protobuf.StringValue placa = 2;
+    google.protobuf.StringValue tipo = 3;
+    google.protobuf.StringValue cor = 4;
+    google.protobuf.StringValue marca = 5;
+    google.protobuf.StringValue info = 6;
+}
+
+message UpdateVeiculoRes {}
+
+message DeleteVeiculoReq {
+    repeated string veiculo_id = 1;
+}
+
+message DeleteVeiculoRes {}
+
+// =========

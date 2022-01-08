@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "./internal/api/v1";
+
+package registro;
+
+import "google/protobuf/timestamp.proto";
+
+message Registro {
+    string registro_id = 1;
+	string processo_id = 2;
+	string placa = 3;
+	string tipo_veiculo = 4;
+	string cor_veiculo = 5;
+	string marca_veiculo = 6;
+	string armazenamento = 7;
+	string confianca = 8;
+	google.protobuf.Timestamp criado_em = 9;
+}
