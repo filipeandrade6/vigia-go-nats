@@ -194,18 +194,6 @@ func (p *Processador) ListProcessos() ([]string, []string) {
 }
 
 // =================================================================================
-// Matchlist
-
-func (p *Processador) UpdateMatchlist(placas []string) {
-	p.mu.Lock()
-	p.matchlist = make(map[string]bool)
-	for _, placa := range placas {
-		p.matchlist[placa] = true
-	}
-	p.mu.Unlock()
-}
-
-// =================================================================================
 // Armazenamento
 
 func (p *Processador) UpdateArmazenamento(armazenamento string, horasRetencao int) error {

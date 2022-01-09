@@ -103,17 +103,18 @@ func (c Core) Delete(ctx context.Context, svID string) error {
 	return nil
 }
 
-func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) (ServidoresGravacao, error) {
-	dbSVs, err := c.store.Query(ctx, query, pageNumber, rowsPerPage)
-	if err != nil {
-		if errors.Is(err, database.ErrDBNotFound) {
-			return nil, ErrNotFound
-		}
-		return nil, fmt.Errorf("query: %w", err)
-	}
+// TODO arrumar
+// func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) (ServidoresGravacao, error) {
+// 	dbSVs, err := c.store.Query(ctx, query, pageNumber, rowsPerPage)
+// 	if err != nil {
+// 		if errors.Is(err, database.ErrDBNotFound) {
+// 			return nil, ErrNotFound
+// 		}
+// 		return nil, fmt.Errorf("query: %w", err)
+// 	}
 
-	return toServidorGravacaoSlice(dbSVs), nil
-}
+// 	return toServidorGravacaoSlice(dbSVs), nil
+// }
 
 func (c Core) QueryByID(ctx context.Context, svID string) (ServidorGravacao, error) {
 	if err := validate.CheckID(svID); err != nil {

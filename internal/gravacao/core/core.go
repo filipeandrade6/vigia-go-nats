@@ -11,6 +11,7 @@ import (
 	"github.com/filipeandrade6/vigia-go/internal/core/camera"
 	"github.com/filipeandrade6/vigia-go/internal/core/processo"
 	"github.com/filipeandrade6/vigia-go/internal/core/registro"
+	"github.com/filipeandrade6/vigia-go/internal/core/servidorgravacao"
 	"github.com/filipeandrade6/vigia-go/internal/core/veiculo"
 	"github.com/filipeandrade6/vigia-go/internal/gravacao/config"
 	"github.com/filipeandrade6/vigia-go/internal/sys/database"
@@ -111,6 +112,7 @@ func Run(log *zap.SugaredLogger, cfg config.Configuration) error {
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
 
+	servidorGravacaoCore := servidorgravacao.NewCore(log, db)
 	cameraCore := camera.NewCore(log, db)
 	processoCore := processo.NewCore(log, db)
 	registroCore := registro.NewCore(log, db)
@@ -119,6 +121,7 @@ func Run(log *zap.SugaredLogger, cfg config.Configuration) error {
 	svc := service.NewService(
 		log,
 		msgr,
+		servidorGravacaoCore,
 		cameraCore,
 		processoCore,
 		registroCore,
