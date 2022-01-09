@@ -59,7 +59,7 @@ func (s *Service) registroHandler(msg *nats.Msg) {
 	_, err = s.registroCore.Create(context.Background(), reg)
 	if err != nil {
 		s.log.Errorf("creating registro in db: %s", err)
-		s.msgr.Publish("management.processo.parar", reg.ProcessoID) // stop the process...
+		s.msgr.Publish("management.processo.parar", reg.ProcessoID) // ! stop the process...
 		return
 	}
 

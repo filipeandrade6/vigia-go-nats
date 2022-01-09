@@ -20,8 +20,8 @@ type Service struct {
 	msgr *nats.EncodedConn
 
 	mu                 sync.RWMutex
-	matchlist          map[string]bool
-	servidoresGravacao map[string]bool // ! necessário?
+	matchlist          map[string]bool // TODO trocar por struct?
+	servidoresGravacao map[string]bool // ! necessário? TODO trocar por struct?
 	processos          map[string]processo.Processo
 
 	servidorGravacaoCore servidorgravacao.Core
@@ -44,8 +44,8 @@ func NewService(
 	return &Service{
 		log:                  log,
 		msgr:                 msgr,
-		matchlist:            make(map[string]bool),
-		servidoresGravacao:   make(map[string]bool), // ! necessário?
+		matchlist:            make(map[string]bool), // TODO trocar por struct?
+		servidoresGravacao:   make(map[string]bool), // ! necessário? TODO trocar por struct?
 		processos:            make(map[string]processo.Processo),
 		servidorGravacaoCore: servidorGravacaoCore,
 		cameraCore:           cameraCore,
