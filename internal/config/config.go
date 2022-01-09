@@ -14,7 +14,6 @@ type Database struct {
 	MaxIDLEConns int    `mapstructure:"maxidleconns"`
 	MaxOpenConns int    `mapstructure:"maxopenconns"`
 	DisableTLS   bool   `mapstructure:"disabletls"`
-	// SSLMode      string `mapstructure:"sslmode"`
 }
 
 type Configuration struct {
@@ -29,7 +28,6 @@ func ParseConfig(build string) (Configuration, error) {
 	viper.SetDefault("database.name", "vigia")
 	viper.SetDefault("database.maxidleconns", "0")
 	viper.SetDefault("database.maxopenconns", "0")
-	// viper.SetDefault("database.sslmode", "disable")
 	viper.SetDefault("database.disabletls", "true")
 
 	viper.BindEnv("database.host", "VIGIA_DB_HOST")
@@ -38,7 +36,6 @@ func ParseConfig(build string) (Configuration, error) {
 	viper.BindEnv("database.name", "VIGIA_DB_NAME")
 	viper.BindEnv("database.maxidleconns", "VIGIA_DB_MAXIDLECONNS")
 	viper.BindEnv("database.maxopenconns", "VIGIA_DB_MAXOPENCONNS")
-	// viper.BindEnv("database.sslmode", "VIGIA_DB_SSLMODE")
 	viper.BindEnv("database.sslmode", "VIGIA_DB_DISABLETLS")
 
 	viper.AutomaticEnv()

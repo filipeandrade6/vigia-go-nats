@@ -12,6 +12,7 @@ import (
 
 // Se descober retornar nula é pq tem erro
 func (s *Service) descobertaHandler(msg *nats.Msg) {
+	// ? ver se vai funcionar isso aqui
 	var err error
 	defer func(err error) {
 		if err != nil {
@@ -56,7 +57,8 @@ func (s *Service) registroHandler(msg *nats.Msg) {
 
 	_, err = s.registroCore.Create(context.Background(), reg)
 	if err != nil {
-		s.log.Errorf("creating registro in db: %s", err) // ! disparar um alerta
+		s.log.Errorf("creating registro in db: %s", err)            // ! disparar um alerta
+		s.msgr.Publish("management.processo.parar", reg.ProcessoID) // stop the process...
 		return
 	}
 

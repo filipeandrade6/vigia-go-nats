@@ -9,11 +9,11 @@ import (
 	"syscall"
 
 	"github.com/filipeandrade6/vigia-go/internal/core/camera"
+	"github.com/filipeandrade6/vigia-go/internal/core/config"
 	"github.com/filipeandrade6/vigia-go/internal/core/processo"
 	"github.com/filipeandrade6/vigia-go/internal/core/registro"
 	"github.com/filipeandrade6/vigia-go/internal/core/servidorgravacao"
 	"github.com/filipeandrade6/vigia-go/internal/core/veiculo"
-	"github.com/filipeandrade6/vigia-go/internal/gravacao/config"
 	"github.com/filipeandrade6/vigia-go/internal/sys/database"
 	"github.com/filipeandrade6/vigia-go/internal/sys/messaging"
 	"github.com/nats-io/nats.go"
