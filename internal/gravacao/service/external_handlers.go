@@ -114,7 +114,7 @@ func (s *Service) atualizarArmazenamento() {
 func (s *Service) atualizarMatch() error {
 	veiculos, err := s.veiculoCore.QueryAll(context.Background())
 	if err != nil {
-		fmt.Println(err) // ! arrumar
+		return err
 	}
 
 	s.mu.Lock()

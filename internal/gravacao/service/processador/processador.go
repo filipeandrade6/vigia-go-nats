@@ -1,7 +1,6 @@
 package processador
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -124,76 +123,6 @@ func (p *Processador) Stop() error {
 }
 
 // =================================================================================
-// Processo
-
-func (p *Processador) StartProcessos(pReq []Camera) {
-	for _, prc := range pReq {
-		p.mu.RLock()
-		_, ok := p.processos[prc.GetID()]
-		_, ok2 := p.retry[prc.GetID()]
-		p.mu.RUnlock()
-		if ok || ok2 {
-			continue
-		}
-
-		p.mu.Lock()
-		p.processos[prc.GetID()] = prc
-		p.mu.Unlock()
-
-		prc.Start(p.armazenamento, p.regChan, p.interErrChan)
-	}
-}
-
-func (p *Processador) StopProcessos(processos []string) []string {
-	var errPrc []string
-
-	for _, prc := range processos {
-		p.mu.RLock()
-		_, ok := p.processos[prc]
-		_, ok2 := p.retry[prc]
-		p.mu.RUnlock()
-
-		if ok {
-			p.processos[prc].Stop()
-
-			p.mu.Lock()
-			delete(p.processos, prc)
-			p.mu.Unlock()
-			continue
-		}
-
-		if ok2 {
-			p.mu.Lock()
-			delete(p.retry, prc)
-			p.mu.Unlock()
-			continue
-		}
-
-		errPrc = append(errPrc, prc)
-	}
-
-	if len(errPrc) > 0 {
-		return errPrc
-	}
-
-	return nil
-}
-
-func (p *Processador) ListProcessos() ([]string, []string) {
-	var prc []string
-	for k := range p.processos {
-		prc = append(prc, k)
-	}
-
-	var retryPrc []string
-	for k := range p.retry {
-		retryPrc = append(retryPrc, k)
-	}
-
-	return prc, retryPrc
-}
-
-// =================================================================================
 // Armazenamento
 
 func (p *Processador) UpdateArmazenamento(armazenamento string, horasRetencao int) error {
@@ -267,23 +196,5 @@ func (p *Processador) begintHousekeeper() {
 	})
 	if err != nil {
 		p.errChan <- operrors.OpError{Err: fmt.Errorf("housekeeper stopped: %w", err)}
-	}
-}
-
-func (p *Processador) createAndCheckRegistro(reg registro.Registro) {
-	_, err := p.registroCore.Create(context.Background(), reg)
-	if err != nil {
-		if nonStoppedPrc := p.StopProcessos([]string{reg.ProcessoID}); nonStoppedPrc != nil {
-			p.errChan <- operrors.OpError{Err: fmt.Errorf("could not stop processo: %s", nonStoppedPrc)}
-		}
-		p.errChan <- operrors.OpError{Err: fmt.Errorf("could not create registro: %w", err)}
-		return
-	}
-
-	p.mu.RLock()
-	_, ok := p.matchlist[reg.Placa]
-	p.mu.RUnlock()
-	if ok {
-		p.matchChan <- reg.RegistroID
 	}
 }
