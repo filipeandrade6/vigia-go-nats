@@ -18,11 +18,9 @@ import (
 
 type Service struct {
 	log  *zap.SugaredLogger
-	msgr *nats.Conn
+	msgr *nats.EncodedConn
 
-	mu        *sync.RWMutex
-	processos map[string]Camera // TODO era ponteiros
-	retry     map[string]Camera // TODO era ponteiros
+	mu        sync.RWMutex
 	matchlist map[string]bool
 
 	cameraCore   camera.Core
@@ -50,7 +48,7 @@ func NewService(
 }
 
 func (s *Service) Start() {
-	_, err := s.msgr.Subscribe("management", s.managementH)
+	_, err := s.msgr.Subscribe("management.>", s.managementH)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -64,16 +62,28 @@ func (s *Service) Start() {
 }
 
 func (s *Service) managementH(msg *nats.Msg) {
+	fmt.Println(msg.Subject)
+
 	switch msg.Subject {
-	case "processo.iniciar":
+	case "management.processo.iniciar":
 		fmt.Println("recebido processo.create") // TODO COLOCAR REPLY?
 		s.iniciarProcesso(string(msg.Data))
-	case "processo.parar":
+
+	case "management.processo.parar":
 		fmt.Println("recebido processo.parar") // TODO COLOCAR REPLY?
 		s.pararProcesso(string(msg.Data))
-	case "processo.listar":
-		fmt.Println("recebido processo.listar")
+
+	case "management.processo.listar":
+		fmt.Println("recebido processo.listar") // TODO COLOCAR REPLY?
 		s.listarProcesso()
+
+	case "management.armazenamento.atualizar":
+		fmt.Println("recebido armazenamento.atualizar") // TODO COLOCAR REPLY?
+		s.atualizarArmazenamento()
+
+	case "management.match.atualizar":
+		fmt.Println("atualizar lista de match")
+		s.atualizarMatch()
 	}
 }
 
@@ -106,7 +116,11 @@ func (s *Service) listarProcesso() {
 	if err := s.msgr.Publish("camera.listar", nil); err != nil {
 		fmt.Println("ERROR") // ! arrumar
 	}
-	fmt.Println()
+	fmt.Println("entrou listar Processos")
+}
+
+func (s *Service) atualizarArmazenamento() {
+	fmt.Println("implementar a atualização de armazenamento")
 }
 
 func (s *Service) registroH(msg *nats.Msg) {
@@ -132,4 +146,18 @@ func (s *Service) registroH(msg *nats.Msg) {
 
 func alerta(regID string) {
 	fmt.Println("encontrado - alertaID:", regID)
+}
+
+func (s *Service) atualizarMatch() {
+	veiculos, err := s.veiculoCore.QueryAll(context.Background())
+	if err != nil {
+		fmt.Println("ERROR") // ! arrumar
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.matchlist = make(map[string]bool)
+	for _, v := range veiculos {
+		s.matchlist[v.Placa] = true
+	}
 }
