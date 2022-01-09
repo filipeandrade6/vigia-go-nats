@@ -10,14 +10,15 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-// Se descober retornar nula é pq tem erro
+// * Se descoberta retornar nula é pq tem erro
+
 func (s *Service) descobertaHandler(msg *nats.Msg) {
 	// ? ver se vai funcionar isso aqui
 	var err error
 	defer func(err error) {
 		if err != nil {
 			if err = msg.Respond(nil); err != nil {
-				s.log.Errorf("responding mensage: %s", err) // ! disparar um alerta
+				s.log.Errorf("responding mensage: %s", err)
 			}
 		}
 	}(err)
@@ -26,13 +27,13 @@ func (s *Service) descobertaHandler(msg *nats.Msg) {
 
 	err = json.Unmarshal(msg.Data, &sv)
 	if err != nil {
-		s.log.Errorf("unmarshalling mensage: %s", err) // ! disparar um alerta
+		s.log.Errorf("unmarshalling mensage: %s", err)
 		return
 	}
 
 	svDB, err := s.servidorGravacaoCore.Create(context.Background(), sv)
 	if err != nil {
-		s.log.Errorf("creating servidor gravacao in database: %s", err) // ! disparar um alerta
+		s.log.Errorf("creating servidor gravacao in database: %s", err)
 		return
 	}
 
@@ -51,13 +52,13 @@ func (s *Service) registroHandler(msg *nats.Msg) {
 
 	err := json.Unmarshal(msg.Data, &reg)
 	if err != nil {
-		s.log.Errorf("unmarshalling mensage: %s", err) // ! disparar um alerta
+		s.log.Errorf("unmarshalling mensage: %s", err)
 		return
 	}
 
 	_, err = s.registroCore.Create(context.Background(), reg)
 	if err != nil {
-		s.log.Errorf("creating registro in db: %s", err)            // ! disparar um alerta
+		s.log.Errorf("creating registro in db: %s", err)
 		s.msgr.Publish("management.processo.parar", reg.ProcessoID) // stop the process...
 		return
 	}
@@ -70,12 +71,8 @@ func (s *Service) registroHandler(msg *nats.Msg) {
 	}
 }
 
-func (s *Service) infoHandler(msg *nats.Msg) {
-	fmt.Println("info handler acionado") // TODO COLOCAR ALGUMA COSIA
-}
-
 func (s *Service) erroHandler(msg *nats.Msg) {
-	fmt.Println("error handler acionado") // TODO COLOCAR ALGUMA COSIA
+	s.log.Errorw("processing: %s", string(msg.Data))
 }
 
 func alerta(regID string) {

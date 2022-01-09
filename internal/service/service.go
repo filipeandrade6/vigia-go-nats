@@ -44,7 +44,9 @@ func NewService(
 	return &Service{
 		log:                  log,
 		msgr:                 msgr,
-		servidoresGravacao:   make(map[string]bool),
+		matchlist:            make(map[string]bool),
+		servidoresGravacao:   make(map[string]bool), // ! necessário?
+		processos:            make(map[string]processo.Processo),
 		servidorGravacaoCore: servidorGravacaoCore,
 		cameraCore:           cameraCore,
 		processoCore:         processoCore,
@@ -68,11 +70,6 @@ func (s *Service) Start() {
 	}
 
 	_, err = s.msgr.Subscribe("registro.>", s.registroHandler)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	_, err = s.msgr.Subscribe("info.>", s.infoHandler)
 	if err != nil {
 		fmt.Println(err)
 	}
