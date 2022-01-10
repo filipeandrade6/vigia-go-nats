@@ -72,9 +72,6 @@ func (p *Processador) Start() {
 
 	for {
 		select {
-		case reg := <-p.regChan:
-			go p.createAndCheckRegistro(reg)
-
 		// TODO ver qual o tipo de erro que da quando a camera estiver conectada e ficar offline...
 		case err := <-p.interErrChan:
 			switch {
@@ -115,9 +112,9 @@ func (p *Processador) Stop() error {
 	}
 	p.mu.RUnlock()
 
-	if nonStoppedPrc := p.StopProcessos(prc); nonStoppedPrc != nil {
-		return fmt.Errorf("could not stop processos: %s", nonStoppedPrc)
-	}
+	// if nonStoppedPrc := p.StopProcessos(prc); nonStoppedPrc != nil {
+	// 	return fmt.Errorf("could not stop processos: %s", nonStoppedPrc)
+	// }
 
 	return nil
 }

@@ -3,7 +3,6 @@ package usuario
 import (
 	"unsafe"
 
-	pb "github.com/filipeandrade6/vigia-go/internal/api/v1"
 	"github.com/filipeandrade6/vigia-go/internal/core/usuario/db"
 
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
@@ -42,46 +41,4 @@ func toUsuarioSlice(dbUsrs []db.Usuario) []Usuario {
 		usuarios[i] = toUsuario(dbUsr)
 	}
 	return usuarios
-}
-
-// =============================================================================
-
-func (u Usuario) ToProto() *pb.Usuario {
-	return &pb.Usuario{
-		UsuarioId: u.UsuarioID,
-		Email:     u.Email,
-		Funcao:    u.Funcao,
-		Senha:     u.Senha,
-	}
-}
-
-func FromProto(u *pb.Usuario) Usuario {
-	return Usuario{
-		UsuarioID: u.GetUsuarioId(),
-		Email:     u.GetEmail(),
-		Funcao:    u.GetFuncao(),
-		Senha:     u.GetSenha(),
-	}
-}
-
-type Usuarios []Usuario
-
-func (u Usuarios) ToProto() []*pb.Usuario {
-	var usuarios []*pb.Usuario
-
-	for _, usuario := range u {
-		usuarios = append(usuarios, usuario.ToProto())
-	}
-
-	return usuarios
-}
-
-func UsuariosFromProto(u []*pb.Usuario) Usuarios { // TODO ver se esta sendo utilizado
-	var usrs Usuarios
-
-	for _, usr := range u {
-		usrs = append(usrs, FromProto(usr))
-	}
-
-	return usrs
 }

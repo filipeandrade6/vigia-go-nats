@@ -47,7 +47,7 @@ func (c Core) Create(ctx context.Context, r Registro) (string, error) {
 	return dbReg.RegistroID, nil
 }
 
-func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) (Registros, error) {
+func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) ([]Registro, error) {
 	dbRegs, err := c.store.Query(ctx, query, pageNumber, rowsPerPage)
 	if err != nil {
 		if errors.Is(err, database.ErrDBNotFound) {

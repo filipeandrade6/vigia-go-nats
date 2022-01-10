@@ -4,7 +4,6 @@ import (
 	"time"
 	"unsafe"
 
-	pb "github.com/filipeandrade6/vigia-go/internal/api/v1"
 	"github.com/filipeandrade6/vigia-go/internal/core/registro/db"
 )
 
@@ -34,41 +33,5 @@ func toRegistroSlice(dbRegs []db.Registro) []Registro {
 	for i, dbReg := range dbRegs {
 		regs[i] = toRegistro(dbReg)
 	}
-	return regs
-}
-
-// =============================================================================
-
-func (r Registro) ToProto() *pb.Registro {
-	return &pb.Registro{
-		RegistroId: r.RegistroID,
-	}
-}
-
-func FromProto(r *pb.Registro) Registro {
-	return Registro{
-		RegistroID: r.GetRegistroId(),
-	}
-}
-
-type Registros []Registro
-
-func (r Registros) ToProto() []*pb.Registro {
-	var regs []*pb.Registro
-
-	for _, reg := range r {
-		regs = append(regs, reg.ToProto())
-	}
-
-	return regs
-}
-
-func RegistrosFromProto(r []*pb.Registro) Registros { // TODO ver se esta sendo utilizado
-	var regs Registros
-
-	for _, reg := range r {
-		regs = append(regs, FromProto(reg))
-	}
-
 	return regs
 }

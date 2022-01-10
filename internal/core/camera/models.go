@@ -3,7 +3,6 @@ package camera
 import (
 	"unsafe"
 
-	pb "github.com/filipeandrade6/vigia-go/internal/api/v1"
 	"github.com/filipeandrade6/vigia-go/internal/core/camera/db"
 	"github.com/golang/protobuf/ptypes/wrappers"
 )
@@ -57,57 +56,5 @@ func toCameraSlice(dbCams []db.Camera) []Camera {
 	for i, dbCam := range dbCams {
 		cams[i] = toCamera(dbCam)
 	}
-	return cams
-}
-
-// =============================================================================
-
-func (c Camera) ToProto() *pb.Camera {
-	return &pb.Camera{
-		CameraId:   c.CameraID,
-		Descricao:  c.Descricao,
-		EnderecoIp: c.EnderecoIP,
-		Porta:      int32(c.Porta),
-		Canal:      int32(c.Canal),
-		Usuario:    c.Usuario,
-		Senha:      c.Senha,
-		Latitude:   c.Latitude,
-		Longitude:  c.Longitude,
-	}
-}
-
-func FromProto(c *pb.Camera) Camera {
-	return Camera{
-		CameraID:   c.GetCameraId(),
-		Descricao:  c.GetDescricao(),
-		EnderecoIP: c.GetEnderecoIp(),
-		Porta:      int(c.GetPorta()),
-		Canal:      int(c.GetCanal()),
-		Usuario:    c.GetUsuario(),
-		Senha:      c.GetSenha(),
-		Latitude:   c.GetLatitude(),
-		Longitude:  c.GetLongitude(),
-	}
-}
-
-type Cameras []Camera
-
-func (c Cameras) ToProto() []*pb.Camera {
-	var cams []*pb.Camera
-
-	for _, cam := range c {
-		cams = append(cams, cam.ToProto())
-	}
-
-	return cams
-}
-
-func CamerasFromProto(c []*pb.Camera) Cameras { // TODO ver se esta sendo utilizado
-	var cams Cameras
-
-	for _, cam := range c {
-		cams = append(cams, FromProto(cam))
-	}
-
 	return cams
 }

@@ -121,7 +121,7 @@ func (c Core) Delete(ctx context.Context, cameraID string) error {
 	return nil
 }
 
-func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) (Cameras, error) {
+func (c Core) Query(ctx context.Context, query string, pageNumber int, rowsPerPage int) ([]Camera, error) {
 	dbCams, err := c.store.Query(ctx, query, pageNumber, rowsPerPage)
 	if err != nil {
 		if errors.Is(err, database.ErrDBNotFound) {
