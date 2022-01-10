@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/filipeandrade6/vigia-go/cmd/gravacao/cmd"
+	"github.com/filipeandrade6/vigia-go/app/cmd"
 )
 
 func main() {

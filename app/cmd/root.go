@@ -6,8 +6,8 @@ import (
 
 	// "path/filepath"
 
-	"github.com/filipeandrade6/vigia-go/internal/gravacao/config"
-	"github.com/filipeandrade6/vigia-go/internal/gravacao/core"
+	"github.com/filipeandrade6/vigia-go/internal/config"
+	"github.com/filipeandrade6/vigia-go/internal/core"
 	"github.com/filipeandrade6/vigia-go/internal/sys/logger"
 
 	"github.com/spf13/cobra"
